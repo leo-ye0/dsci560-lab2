@@ -3,12 +3,11 @@ import pandas as pd
 from datetime import datetime
 
 # Reddit API setup (Register at https://www.reddit.com/prefs/apps/)
+# Replace with your credentials
 reddit = praw.Reddit(
-    # client_id="YOUR_CLIENT_ID",
-    client_id="zksjf6woKZY5rbcBpXAvwQ",
-    # client_secret="YOUR_CLIENT_SECRET", 
-    client_secret="sqR0v9baoi2J7y5voG8qnNJErqW6HA",
-    user_agent="leoyeah"
+    client_id="YOUR_CLIENT_ID",
+    client_secret="YOUR_CLIENT_SECRET", 
+    user_agent="reddit_username"
 )
 
 def scrape_worldcup_data(limit=100):
@@ -23,18 +22,17 @@ def scrape_worldcup_data(limit=100):
             'title': post.title,
             'text': post.selftext,
             'score': post.score,
-            'num_comments': post.num_comments,
-            'created_utc': datetime.fromtimestamp(post.created_utc),
-            'url': post.url,
-            'post_id': post.id
+            'num_comments': post.num_comments
         }
         
         # Get top comments for context
         post.comments.replace_more(limit=0)
         comments = []
-        for comment in post.comments[:10]:  # Top 10 comments
-            if hasattr(comment, 'body'):
+        for comment in post.comments[:15]:  # Check more to filter out bots
+            if hasattr(comment, 'body') and not comment.body.startswith('Hello! Thanks for your submission'):
                 comments.append(comment.body)
+                if len(comments) >= 5:  # Stop at 5 real comments
+                    break
         
         post_info['top_comments'] = comments
         posts_data.append(post_info)
@@ -56,11 +54,11 @@ def analyze_data_quality(df):
 
 if __name__ == "__main__":
     # Scrape data
-    df = scrape_worldcup_data(50)
+    df = scrape_worldcup_data(100)
     
     # Analyze
     analyze_data_quality(df)
     
     # Save for further processing
-    df.to_csv('data/raw_data/worldcup_data.csv', index=False)
-    print("\nData saved to data/raw_data/worldcup_data.csv")
+    df.to_csv('data/worldcup_data.csv', index=False)
+    print("\nData saved to data/worldcup_data.csv")
