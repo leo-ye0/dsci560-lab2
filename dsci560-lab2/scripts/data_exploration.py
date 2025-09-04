@@ -5,10 +5,9 @@ from datetime import datetime
 # Reddit API setup (Register at https://www.reddit.com/prefs/apps/)
 # Replace with your credentials
 reddit = praw.Reddit(
-    client_id="zksjf6woKZY5rbcBpXAvwQ",
-    # client_secret="YOUR_CLIENT_SECRET", 
-    client_secret="sqR0v9baoi2J7y5voG8qnNJErqW6HA",
-    user_agent="leoyeah"
+    client_id="YOUR_CLIENT_ID",
+    client_secret="YOUR_CLIENT_SECRET", 
+    user_agent="reddit_username"
 )
 
 def scrape_worldcup_data(limit=100):
@@ -27,7 +26,7 @@ def scrape_worldcup_data(limit=100):
         }
         
         # Get top comments for context
-        post.comments.replace_more(limit=0)
+        post.comments.replace_more(limit=0) #do not click "load more comments"
         comments = []
         for comment in post.comments[:15]:  # Check more to filter out bots
             if hasattr(comment, 'body') and not comment.body.startswith('Hello! Thanks for your submission'):
