@@ -1,0 +1,66 @@
+import praw
+import pandas as pd
+from datetime import datetime
+
+# Reddit API setup (Register at https://www.reddit.com/prefs/apps/)
+reddit = praw.Reddit(
+    # client_id="YOUR_CLIENT_ID",
+    client_id="zksjf6woKZY5rbcBpXAvwQ",
+    # client_secret="YOUR_CLIENT_SECRET", 
+    client_secret="sqR0v9baoi2J7y5voG8qnNJErqW6HA",
+    user_agent="leoyeah"
+)
+
+def scrape_worldcup_data(limit=100):
+    """Scrape posts and comments from r/worldcup for chatbot training data"""
+    
+    subreddit = reddit.subreddit("worldcup")
+    posts_data = []
+    
+    # Get hot posts
+    for post in subreddit.hot(limit=limit):
+        post_info = {
+            'title': post.title,
+            'text': post.selftext,
+            'score': post.score,
+            'num_comments': post.num_comments,
+            'created_utc': datetime.fromtimestamp(post.created_utc),
+            'url': post.url,
+            'post_id': post.id
+        }
+        
+        # Get top comments for context
+        post.comments.replace_more(limit=0)
+        comments = []
+        for comment in post.comments[:10]:  # Top 10 comments
+            if hasattr(comment, 'body'):
+                comments.append(comment.body)
+        
+        post_info['top_comments'] = comments
+        posts_data.append(post_info)
+    
+    return pd.DataFrame(posts_data)
+
+def analyze_data_quality(df):
+    """Analyze scraped data for chatbot training suitability"""
+    
+    print(f"Total posts: {len(df)}")
+    print(f"Posts with text: {len(df[df['text'].str.len() > 0])}")
+    print(f"Average score: {df['score'].mean():.2f}")
+    print(f"Average comments: {df['num_comments'].mean():.2f}")
+    
+    # Show sample data
+    print("\nSample post titles:")
+    for title in df['title'].head(5):
+        print(f"- {title}")
+
+if __name__ == "__main__":
+    # Scrape data
+    df = scrape_worldcup_data(50)
+    
+    # Analyze
+    analyze_data_quality(df)
+    
+    # Save for further processing
+    df.to_csv('data/raw_data/worldcup_data.csv', index=False)
+    print("\nData saved to data/raw_data/worldcup_data.csv")
