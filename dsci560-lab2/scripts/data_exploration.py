@@ -5,9 +5,10 @@ from datetime import datetime
 # Reddit API setup (Register at https://www.reddit.com/prefs/apps/)
 # Replace with your credentials
 reddit = praw.Reddit(
-    client_id="YOUR_CLIENT_ID",
-    client_secret="YOUR_CLIENT_SECRET", 
-    user_agent="reddit_username"
+    client_id="zksjf6woKZY5rbcBpXAvwQ",
+    # client_secret="YOUR_CLIENT_SECRET", 
+    client_secret="sqR0v9baoi2J7y5voG8qnNJErqW6HA",
+    user_agent="leoyeah"
 )
 
 def scrape_worldcup_data(limit=100):
@@ -35,7 +36,10 @@ def scrape_worldcup_data(limit=100):
                     break
         
         post_info['top_comments'] = comments
-        posts_data.append(post_info)
+        
+        # Only keep posts with at least 2 real comments
+        if len(comments) >= 2:
+            posts_data.append(post_info)
     
     return pd.DataFrame(posts_data)
 
