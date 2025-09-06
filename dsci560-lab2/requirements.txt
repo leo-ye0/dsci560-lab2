@@ -1,3 +1,0 @@
-praw==7.8.1
-pandas==2.3.2
-pdfplumber==0.11.7
