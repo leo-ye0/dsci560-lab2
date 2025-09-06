@@ -1,6 +1,13 @@
 import pandas as pd
 import pdfplumber
 
+def load_pdf(file):
+    with pdfplumber.open(path) as pdf:  
+        page = pdf.pages[0]
+        text = page.extract_text()
+        print(f'Loading pdf: {file}\n')
+    return text
+
 def get_matchups(text):
     home_v_away = []
 
@@ -33,10 +40,7 @@ if __name__ == "__main__":
     file = 'concacaf_qualifiers.pdf'
     path = '../data/' + file
 
-    with pdfplumber.open(path) as pdf:  
-        page = pdf.pages[0]
-        text = page.extract_text()
-        print(f'Loading pdf: {file}\n')
+    text = load_pdf(file)
 
     matchups = get_matchups(text)
     df = matchups_to_df(matchups)
