@@ -5,11 +5,10 @@ from datetime import datetime
 # Reddit API setup (Register at https://www.reddit.com/prefs/apps/)
 # Replace with your credentials
 reddit = praw.Reddit(
-    client_id="zksjf6woKZY5rbcBpXAvwQ",
-    client_secret="sqR0v9baoi2J7y5voG8qnNJErqW6HA",
-    user_agent="leoyeah"
+    client_id="YOUR_CLIENT_ID",
+    client_secret="YOUR_CLIENT_SECRET", 
+    user_agent="reddit_username"
 )
-
 def scrape_worldcup_data(limit=100):
     """Scrape posts and comments from r/worldcup for chatbot training data"""
     
