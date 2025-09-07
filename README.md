@@ -87,3 +87,61 @@ Output (for this example): `data/concacaf_matchups.csv` with structured conversa
 - Python 3.6+
 - pdfplumber
 - pandas
+
+# Kaggle FIFA World Cup Historical Data (CSV) for Chatbot Training
+
+A Python script to download CSV files from Kaggle for training our AI chatbot.
+
+## Features
+
+- Reads and preprocesses all 3 official Kaggle datasets
+- Cleans numerical columns
+- Performs type coercion and fills in missing data
+- Merges relevant information into a unified structure by year
+
+## Setup
+
+Install dependencies:
+```bash
+pip install kagglehub pandas
+```
+## Usage
+
+```bash
+python scripts/data_exploration_kaggle.py
+```
+
+Output: `data/WorldCups.csv`, `data/WolrdCupMatches.csv`, and `data/WolrdCupPlayers.csv` with tournament, match, and player-level data.
+Also logs summary stats (e.g., top scorers, match cities) to console.
+
+## Data Structure
+
+1. WorldCups.csv
+
+-`Year`: The year the tournament was held
+
+-`Country`: Host country
+
+-`Winner`, `Runners-Up`, `Third`, `Fourth`: Final rankings
+
+-`GoalsScored`, `MatchesPlayed`, `Attendance`: Overall statistics
+
+2. WorldCupMatches.csv
+
+-`Year`, `Datetime`, `City`, `Stadium`: Match metadata
+
+-`Home Team Name`, `Away Team Name`, `Home Team Goals`, `Away Team Goals`: Team data
+
+-`MatchID`: Unique identifier used to link with player data
+
+3. WorldCupPlayers.csv
+
+-`MatchID`: Foreign key to WorldCupMatches.csv
+
+-`Team Initials`, `Coach Name`, `Player Name`, `Position`, `Line-up`, `Shirt Number`: Basic player data
+
+## Requirements
+
+- Python 3.6+
+- kagglehub
+- pandas
