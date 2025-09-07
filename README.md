@@ -101,10 +101,18 @@ A Python script to download CSV files from Kaggle for training our AI chatbot.
 
 ## Setup
 
-Install dependencies:
+1. Install dependencies:
 ```bash
 pip install kagglehub pandas
 ```
+
+2. Download files from Kaggle: 
+
+```python
+path = kagglehub.dataset_download("abecklas/fifa-world-cup")
+```
+Original data source: (https://www.kaggle.com/datasets/abecklas/fifa-world-cup?resource=download)
+
 ## Usage
 
 ```bash
