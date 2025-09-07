@@ -1,6 +1,8 @@
+# Install dependencies
 import pandas as pd
 import pdfplumber
 
+# Loads data (PDF) and converts it to text
 def load_pdf(file):
     with pdfplumber.open(path) as pdf:  
         page = pdf.pages[0]
@@ -8,12 +10,9 @@ def load_pdf(file):
         print(f'Loading pdf: {file}\n')
     return text
 
-def get_matchups(text):
+# Filters the text to only get matchups between countries
+def get_matchups(text, keywords):
     home_v_away = []
-
-    keywords = {'El':'El Savador', 'Savador':'El Savador', 
-                'Trinidad':'Trinidad & Tobago', 'Tobago':'Trinidad & Tobago',
-                'Costa':'Costa Rica', 'Rica':'Costa Rica'}
 
     for line in text.split('\n'):
         line = line.split()
@@ -32,6 +31,7 @@ def get_matchups(text):
     
     return home_v_away
 
+# Convert list of matchups to DataFrame
 def matchups_to_df(matchups_list):
     df = pd.DataFrame(matchups_list, columns=['Home', 'Away'])
     return df
@@ -42,7 +42,11 @@ if __name__ == "__main__":
 
     text = load_pdf(file)
 
-    matchups = get_matchups(text)
+    keywords = {'El':'El Savador', 'Savador':'El Savador', 
+            'Trinidad':'Trinidad & Tobago', 'Tobago':'Trinidad & Tobago',
+            'Costa':'Costa Rica', 'Rica':'Costa Rica'}
+    
+    matchups = get_matchups(text, keywords)
     df = matchups_to_df(matchups)
 
     print('Extractring matchups\n')

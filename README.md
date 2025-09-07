@@ -49,3 +49,41 @@ Output: `data/worldcup_data.csv` with structured conversation data
 - Python 3.6+
 - praw
 - pandas
+
+# CONCACAF PDF Converter for Chatbot Training
+
+A Python script to convert PDF files of matchups into CSV files used for chatbot training. The example used for this instance will be the CONCACAF Qualification Series.
+
+## Features
+- Loads in PDF file
+- Filters out PDF and convert them to text to find matchups between countries
+- Converts matchups into a data frame
+- Export clean CSV data
+
+## Setup 
+
+1. Install dependencies:
+```bash
+pip install pdfplumber pandas
+```
+
+2. Download PDF file
+
+## Usage
+
+```bash
+python scripts/pdf_conversion.py
+```
+
+Output (for this example): `data/concacaf_matchups.csv` with structured conversation data
+
+## Data Structure
+
+- `home`: Home team
+- `away`: Away team
+
+## Requirements
+
+- Python 3.6+
+- pdfplumber
+- pandas
